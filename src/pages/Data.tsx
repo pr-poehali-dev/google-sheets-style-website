@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +23,7 @@ import Icon from "@/components/ui/icon";
 const Data = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [selectedWeek, setSelectedWeek] = useState(0);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editingShipment, setEditingShipment] = useState<any>(null);
@@ -58,9 +59,57 @@ const Data = () => {
       driver: "Сидоров П.К.",
       date: "16.12.2024",
     },
+    {
+      id: "ТР-2024-004",
+      origin: "Красноярск",
+      destination: "Иркутск",
+      cargo: "Мебель",
+      weight: "6.3",
+      status: "В пути",
+      driver: "Козлов Д.И.",
+      date: "08.12.2024",
+    },
+    {
+      id: "ТР-2024-005",
+      origin: "Ростов-на-Дону",
+      destination: "Волгоград",
+      cargo: "Электроника",
+      weight: "4.7",
+      status: "Доставлено",
+      driver: "Морозов С.А.",
+      date: "09.12.2024",
+    },
   ]);
 
-  const filteredShipments = shipments.filter((shipment) => {
+  // Группировка заявок по неделям
+  const groupedByWeeks = useMemo(() => {
+    const weeks: { [key: string]: any[] } = {};
+
+    shipments.forEach((shipment) => {
+      const [day, month, year] = shipment.date.split(".");
+      const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+
+      // Получаем понедельник недели
+      const monday = new Date(date);
+      monday.setDate(date.getDate() - date.getDay() + 1);
+
+      const weekKey = monday.toLocaleDateString("ru-RU");
+
+      if (!weeks[weekKey]) {
+        weeks[weekKey] = [];
+      }
+      weeks[weekKey].push(shipment);
+    });
+
+    return Object.entries(weeks).sort((a, b) => {
+      const dateA = new Date(a[0].split(".").reverse().join("-"));
+      const dateB = new Date(b[0].split(".").reverse().join("-"));
+      return dateB.getTime() - dateA.getTime();
+    });
+  }, [shipments]);
+
+  const currentWeekData = groupedByWeeks[selectedWeek] || [null, []];
+  const filteredShipments = currentWeekData[1].filter((shipment: any) => {
     const matchesSearch =
       shipment.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
       shipment.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -98,6 +147,7 @@ const Data = () => {
 
     const updatedShipment = {
       ...editingShipment,
+      id: formData.get("id") as string,
       origin: formData.get("origin") as string,
       destination: formData.get("destination") as string,
       cargo: formData.get("cargo") as string,
@@ -204,6 +254,15 @@ const Data = () => {
           </DialogHeader>
           {editingShipment && (
             <form onSubmit={handleEditShipment} className="space-y-4">
+              <div>
+                <Label htmlFor="edit-id">Номер заявки</Label>
+                <Input
+                  id="edit-id"
+                  name="id"
+                  defaultValue={editingShipment.id}
+                  required
+                />
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="edit-origin">Откуда</Label>
@@ -286,10 +345,52 @@ const Data = () => {
         </DialogContent>
       </Dialog>
 
+      {/* Навигация по неделям */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Все перевозки ({filteredShipments.length})</CardTitle>
+            <CardTitle>Перевозки по неделям</CardTitle>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSelectedWeek(Math.max(0, selectedWeek - 1))}
+                disabled={selectedWeek === 0}
+              >
+                <Icon name="ChevronLeft" className="h-4 w-4" />
+              </Button>
+              <span className="text-sm font-medium min-w-[200px] text-center">
+                {currentWeekData[0] ? (
+                  <>
+                    Неделя с {currentWeekData[0]}
+                    <span className="text-gray-500 ml-2">
+                      ({currentWeekData[1].length} заявок)
+                    </span>
+                  </>
+                ) : (
+                  "Нет данных"
+                )}
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() =>
+                  setSelectedWeek(
+                    Math.min(groupedByWeeks.length - 1, selectedWeek + 1),
+                  )
+                }
+                disabled={selectedWeek >= groupedByWeeks.length - 1}
+              >
+                <Icon name="ChevronRight" className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-between mb-4">
+            <div className="text-sm text-gray-600">
+              Показано заявок: {filteredShipments.length}
+            </div>
             <div className="flex items-center space-x-2">
               <Input
                 placeholder="Поиск..."
@@ -310,8 +411,6 @@ const Data = () => {
               </Select>
             </div>
           </div>
-        </CardHeader>
-        <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
