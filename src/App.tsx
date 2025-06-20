@@ -19,8 +19,8 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
-            <Route index element={<Index />} />
-            <Route path="data" element={<Data />} />
+            <Route index element={<Data />} />
+            <Route path="main" element={<Index />} />
             <Route path="templates" element={<Templates />} />
             <Route
               path="schedule"

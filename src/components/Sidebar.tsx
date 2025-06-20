@@ -7,8 +7,8 @@ const Sidebar = () => {
   const location = useLocation();
 
   const menuItems = [
-    { name: "Главная", href: "/", icon: "Home" },
-    { name: "Данные", href: "/data", icon: "Database" },
+    { name: "Главная", href: "/main", icon: "Home" },
+    { name: "Данные", href: "/", icon: "Database" },
     { name: "Расписание", href: "/schedule", icon: "Calendar" },
     { name: "Договоры", href: "/templates", icon: "FileText" },
     { name: "Водители", href: "/drivers", icon: "Users" },
