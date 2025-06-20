@@ -1,12 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
 import Icon from "@/components/ui/icon";
 
 const Data = () => {
-  const shipments = [
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+
+  const [shipments, setShipments] = useState([
     {
       id: "ТР-2024-001",
       origin: "Москва",
@@ -37,7 +56,39 @@ const Data = () => {
       driver: "Сидоров П.К.",
       date: "16.12.2024",
     },
-  ];
+  ]);
+
+  const filteredShipments = shipments.filter((shipment) => {
+    const matchesSearch =
+      shipment.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      shipment.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      shipment.destination.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      shipment.driver.toLowerCase().includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || shipment.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
+  });
+
+  const handleAddShipment = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const newShipment = {
+      id: `ТР-2024-${String(shipments.length + 1).padStart(3, "0")}`,
+      origin: formData.get("origin") as string,
+      destination: formData.get("destination") as string,
+      cargo: formData.get("cargo") as string,
+      weight: formData.get("weight") as string,
+      status: "Планируется",
+      driver: formData.get("driver") as string,
+      date: new Date().toLocaleDateString("ru-RU"),
+    };
+
+    setShipments([...shipments, newShipment]);
+    setIsAddDialogOpen(false);
+  };
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -58,21 +109,85 @@ const Data = () => {
         <h1 className="text-2xl font-bold text-gray-900">
           Данные по перевозкам
         </h1>
-        <Button>
-          <Icon name="Plus" className="h-4 w-4 mr-2" />
-          Добавить заявку
-        </Button>
+        <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>
+              <Icon name="Plus" className="h-4 w-4 mr-2" />
+              Добавить заявку
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Новая заявка на перевозку</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleAddShipment} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="origin">Откуда</Label>
+                  <Input id="origin" name="origin" required />
+                </div>
+                <div>
+                  <Label htmlFor="destination">Куда</Label>
+                  <Input id="destination" name="destination" required />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="cargo">Груз</Label>
+                <Input id="cargo" name="cargo" required />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="weight">Вес (тонн)</Label>
+                  <Input
+                    id="weight"
+                    name="weight"
+                    type="number"
+                    step="0.1"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="driver">Водитель</Label>
+                  <Input id="driver" name="driver" required />
+                </div>
+              </div>
+              <div className="flex justify-end space-x-2 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsAddDialogOpen(false)}
+                >
+                  Отмена
+                </Button>
+                <Button type="submit">Создать заявку</Button>
+              </div>
+            </form>
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
-            <CardTitle>Все перевозки</CardTitle>
+            <CardTitle>Все перевозки ({filteredShipments.length})</CardTitle>
             <div className="flex items-center space-x-2">
-              <Input placeholder="Поиск..." className="w-80" />
-              <Button variant="outline">
-                <Icon name="Filter" className="h-4 w-4" />
-              </Button>
+              <Input
+                placeholder="Поиск..."
+                className="w-80"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Все статусы</SelectItem>
+                  <SelectItem value="В пути">В пути</SelectItem>
+                  <SelectItem value="Доставлено">Доставлено</SelectItem>
+                  <SelectItem value="Планируется">Планируется</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </CardHeader>
@@ -111,7 +226,7 @@ const Data = () => {
                 </tr>
               </thead>
               <tbody>
-                {shipments.map((shipment) => (
+                {filteredShipments.map((shipment) => (
                   <tr
                     key={shipment.id}
                     className="border-b border-gray-100 hover:bg-gray-50"
@@ -150,6 +265,15 @@ const Data = () => {
               </tbody>
             </table>
           </div>
+          {filteredShipments.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              <Icon
+                name="Package"
+                className="h-12 w-12 mx-auto mb-4 text-gray-300"
+              />
+              <p>Перевозки не найдены</p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
