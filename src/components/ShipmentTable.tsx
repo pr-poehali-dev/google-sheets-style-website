@@ -95,7 +95,7 @@ const ShipmentTable = ({
                 {dayShipments.map((shipment, index) => (
                   <tr
                     key={shipment.id}
-                    className={`border-b border-gray-100 hover:bg-blue-50 transition-colors h-14 ${
+                    className={`border-b border-gray-100 hover:bg-blue-50/50 hover:shadow-sm transition-all duration-200 ease-in-out h-14 ${
                       index % 2 === 0 ? "bg-white" : "bg-blue-25"
                     }`}
                   >
@@ -196,7 +196,7 @@ const ShipmentTable = ({
                         variant="ghost"
                         size="sm"
                         onClick={() => onEditShipment(shipment)}
-                        className="h-8 w-8 p-0 hover:bg-blue-100"
+                        className="h-8 w-8 p-0 hover:bg-blue-100/60 hover:scale-105 transition-all duration-200 ease-in-out"
                       >
                         <Icon name="Edit" className="h-4 w-4 text-gray-500" />
                       </Button>
