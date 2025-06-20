@@ -57,7 +57,7 @@ const ShipmentTable = ({
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
                   <th className="text-left py-2 px-3 font-semibold text-gray-700 w-20 text-xs">
-                    № Заявки
+                    Номер
                   </th>
                   <th className="text-left py-2 px-3 font-semibold text-gray-700 w-28 text-xs">
                     Откуда
@@ -68,7 +68,7 @@ const ShipmentTable = ({
                   <th className="text-left py-2 px-3 font-semibold text-gray-700 w-36 text-xs">
                     Организация
                   </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-28 text-xs">
+                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-32 text-xs">
                     Водитель
                   </th>
                   <th className="text-left py-2 px-3 font-semibold text-gray-700 w-18 text-xs">
@@ -130,13 +130,13 @@ const ShipmentTable = ({
                         className="text-gray-700 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
+                    <td className="py-2 px-3 text-gray-900 w-32 text-xs">
                       <EditableCell
                         value={shipment.driver}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "driver", value)
                         }
-                        className="text-gray-900 text-xs whitespace-nowrap truncate"
+                        className="text-gray-900 text-xs"
                       />
                     </td>
                     <td className="py-2 px-3 text-gray-900 w-18 text-xs whitespace-nowrap truncate">
