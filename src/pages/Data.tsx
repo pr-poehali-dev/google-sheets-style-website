@@ -24,6 +24,8 @@ const Data = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingShipment, setEditingShipment] = useState<any>(null);
 
   const [shipments, setShipments] = useState([
     {
@@ -88,6 +90,34 @@ const Data = () => {
 
     setShipments([...shipments, newShipment]);
     setIsAddDialogOpen(false);
+  };
+
+  const handleEditShipment = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+
+    const updatedShipment = {
+      ...editingShipment,
+      origin: formData.get("origin") as string,
+      destination: formData.get("destination") as string,
+      cargo: formData.get("cargo") as string,
+      weight: formData.get("weight") as string,
+      status: formData.get("status") as string,
+      driver: formData.get("driver") as string,
+    };
+
+    setShipments(
+      shipments.map((shipment) =>
+        shipment.id === editingShipment.id ? updatedShipment : shipment,
+      ),
+    );
+    setIsEditDialogOpen(false);
+    setEditingShipment(null);
+  };
+
+  const openEditDialog = (shipment: any) => {
+    setEditingShipment(shipment);
+    setIsEditDialogOpen(true);
   };
 
   const getStatusColor = (status: string) => {
@@ -165,6 +195,96 @@ const Data = () => {
           </DialogContent>
         </Dialog>
       </div>
+
+      {/* Диалог редактирования */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Редактировать перевозку</DialogTitle>
+          </DialogHeader>
+          {editingShipment && (
+            <form onSubmit={handleEditShipment} className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="edit-origin">Откуда</Label>
+                  <Input
+                    id="edit-origin"
+                    name="origin"
+                    defaultValue={editingShipment.origin}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-destination">Куда</Label>
+                  <Input
+                    id="edit-destination"
+                    name="destination"
+                    defaultValue={editingShipment.destination}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="edit-cargo">Груз</Label>
+                <Input
+                  id="edit-cargo"
+                  name="cargo"
+                  defaultValue={editingShipment.cargo}
+                  required
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="edit-weight">Вес (тонн)</Label>
+                  <Input
+                    id="edit-weight"
+                    name="weight"
+                    type="number"
+                    step="0.1"
+                    defaultValue={editingShipment.weight}
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="edit-driver">Водитель</Label>
+                  <Input
+                    id="edit-driver"
+                    name="driver"
+                    defaultValue={editingShipment.driver}
+                    required
+                  />
+                </div>
+              </div>
+              <div>
+                <Label htmlFor="edit-status">Статус</Label>
+                <Select name="status" defaultValue={editingShipment.status}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Планируется">Планируется</SelectItem>
+                    <SelectItem value="В пути">В пути</SelectItem>
+                    <SelectItem value="Доставлено">Доставлено</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex justify-end space-x-2 pt-4">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => {
+                    setIsEditDialogOpen(false);
+                    setEditingShipment(null);
+                  }}
+                >
+                  Отмена
+                </Button>
+                <Button type="submit">Сохранить</Button>
+              </div>
+            </form>
+          )}
+        </DialogContent>
+      </Dialog>
 
       <Card>
         <CardHeader>
@@ -256,8 +376,12 @@ const Data = () => {
                     </td>
                     <td className="py-3 px-4 text-gray-600">{shipment.date}</td>
                     <td className="py-3 px-4">
-                      <Button variant="ghost" size="sm">
-                        <Icon name="MoreHorizontal" className="h-4 w-4" />
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => openEditDialog(shipment)}
+                      >
+                        <Icon name="Edit" className="h-4 w-4" />
                       </Button>
                     </td>
                   </tr>
