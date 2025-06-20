@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import Icon from "@/components/ui/icon";
+import EditableCell from "@/components/EditableCell";
 
 const Data = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -80,6 +81,18 @@ const Data = () => {
       date: "09.12.2024",
     },
   ]);
+
+  const updateShipmentField = (
+    shipmentId: string,
+    field: string,
+    value: string,
+  ) => {
+    setShipments(
+      shipments.map((shipment) =>
+        shipment.id === shipmentId ? { ...shipment, [field]: value } : shipment,
+      ),
+    );
+  };
 
   // Группировка заявок по неделям
   const groupedByWeeks = useMemo(() => {
@@ -451,29 +464,78 @@ const Data = () => {
                     className="border-b border-gray-100 hover:bg-gray-50"
                   >
                     <td className="py-3 px-4 font-medium text-blue-600">
-                      {shipment.id}
+                      <EditableCell
+                        value={shipment.id}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "id", value)
+                        }
+                        className="font-medium text-blue-600"
+                      />
                     </td>
                     <td className="py-3 px-4 text-gray-900">
-                      {shipment.origin}
+                      <EditableCell
+                        value={shipment.origin}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "origin", value)
+                        }
+                        className="text-gray-900"
+                      />
                     </td>
                     <td className="py-3 px-4 text-gray-900">
-                      {shipment.destination}
+                      <EditableCell
+                        value={shipment.destination}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "destination", value)
+                        }
+                        className="text-gray-900"
+                      />
                     </td>
                     <td className="py-3 px-4 text-gray-600">
-                      {shipment.cargo}
+                      <EditableCell
+                        value={shipment.cargo}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "cargo", value)
+                        }
+                        className="text-gray-600"
+                      />
                     </td>
                     <td className="py-3 px-4 text-gray-900">
-                      {shipment.weight}
+                      <EditableCell
+                        value={shipment.weight}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "weight", value)
+                        }
+                        type="number"
+                        className="text-gray-900"
+                      />
                     </td>
                     <td className="py-3 px-4">
-                      <Badge className={getStatusColor(shipment.status)}>
-                        {shipment.status}
-                      </Badge>
+                      <EditableCell
+                        value={shipment.status}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "status", value)
+                        }
+                        type="status"
+                      />
                     </td>
                     <td className="py-3 px-4 text-gray-900">
-                      {shipment.driver}
+                      <EditableCell
+                        value={shipment.driver}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "driver", value)
+                        }
+                        className="text-gray-900"
+                      />
                     </td>
-                    <td className="py-3 px-4 text-gray-600">{shipment.date}</td>
+                    <td className="py-3 px-4 text-gray-600">
+                      <EditableCell
+                        value={shipment.date}
+                        onSave={(value) =>
+                          updateShipmentField(shipment.id, "date", value)
+                        }
+                        className="text-gray-600"
+                      />
+                    </td>
                     <td className="py-3 px-4">
                       <Button
                         variant="ghost"
