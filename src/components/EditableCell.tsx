@@ -64,7 +64,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
 
   if (type === "status") {
     return (
-      <div className={className}>
+      <div className={`w-full ${className}`}>
         {isEditing ? (
           <Select
             value={editValue}
@@ -76,7 +76,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
             open={isEditing}
             onOpenChange={setIsEditing}
           >
-            <SelectTrigger className="w-32 h-8">
+            <SelectTrigger className="w-32 h-8 min-h-[2rem]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -87,7 +87,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
           </Select>
         ) : (
           <Badge
-            className={`${getStatusColor(value)} cursor-pointer hover:opacity-80`}
+            className={`${getStatusColor(value)} cursor-pointer hover:opacity-80 min-h-[2rem] flex items-center justify-center`}
             onClick={() => setIsEditing(true)}
           >
             {value}
@@ -98,7 +98,7 @@ const EditableCell: React.FC<EditableCellProps> = ({
   }
 
   return (
-    <div className={className}>
+    <div className={`w-full ${className}`}>
       {isEditing ? (
         <Input
           ref={inputRef}
@@ -108,11 +108,11 @@ const EditableCell: React.FC<EditableCellProps> = ({
           onKeyDown={handleKeyDown}
           type={type === "number" ? "number" : "text"}
           step={type === "number" ? "0.1" : undefined}
-          className="h-8 text-sm"
+          className="h-8 min-h-[2rem] text-sm border-0 bg-transparent p-2 focus:bg-white focus:border focus:border-blue-300"
         />
       ) : (
         <div
-          className="cursor-pointer hover:bg-gray-100 rounded px-2 py-1 min-h-[2rem] flex items-center"
+          className="cursor-pointer hover:bg-gray-100 rounded px-2 py-1 min-h-[2rem] flex items-center w-full"
           onClick={() => setIsEditing(true)}
         >
           {value}
