@@ -19,20 +19,20 @@ const Sidebar = () => {
   ];
 
   return (
-    <aside className="fixed left-0 top-16 h-full w-64 bg-white border-r border-gray-200 z-40">
-      <nav className="p-4 space-y-2">
+    <aside className="fixed left-0 top-16 h-full w-44 bg-white border-r border-gray-200 z-40">
+      <nav className="p-3 space-y-1">
         {menuItems.map((item) => (
           <Link
             key={item.href}
             to={item.href}
             className={cn(
-              "flex items-center space-x-3 px-3 py-2 rounded-lg text-sm transition-colors",
+              "flex items-center space-x-2 px-2 py-2 rounded-lg text-sm transition-colors",
               location.pathname === item.href
                 ? "bg-blue-50 text-blue-700 font-medium"
                 : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
             )}
           >
-            <Icon name={item.icon} className="h-5 w-5" />
+            <Icon name={item.icon} className="h-4 w-4" />
             <span>{item.name}</span>
           </Link>
         ))}
