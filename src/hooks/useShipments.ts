@@ -4,10 +4,15 @@ export interface Shipment {
   id: string;
   origin: string;
   destination: string;
+  organization: string;
+  driver: string;
+  quantity: string;
+  operator: string;
+  cost: string;
+  paymentType: string;
   cargo: string;
   weight: string;
   status: string;
-  driver: string;
   date: string;
 }
 
@@ -16,30 +21,45 @@ const initialShipments: Shipment[] = [
     id: "ТР-2024-001",
     origin: "Москва",
     destination: "СПб",
+    organization: "ООО Логистика",
+    driver: "Иванов А.С.",
+    quantity: "12",
+    operator: "Смирнов И.П.",
+    cost: "45000",
+    paymentType: "Безналичный",
     cargo: "Бытовая техника",
     weight: "12.5",
     status: "В пути",
-    driver: "Иванов А.С.",
     date: "15.12.2024",
   },
   {
     id: "ТР-2024-002",
     origin: "Екатеринбург",
     destination: "Казань",
+    organization: "ТК Экспресс",
+    driver: "Петров В.М.",
+    quantity: "8",
+    operator: "Козлова А.Н.",
+    cost: "32000",
+    paymentType: "Наличный",
     cargo: "Продукты питания",
     weight: "8.2",
     status: "Доставлено",
-    driver: "Петров В.М.",
     date: "14.12.2024",
   },
   {
     id: "ТР-2024-003",
     origin: "Новосибирск",
     destination: "Омск",
+    organization: "СибТранс",
+    driver: "Сидоров П.К.",
+    quantity: "15",
+    operator: "Морозов Д.В.",
+    cost: "28000",
+    paymentType: "Безналичный",
     cargo: "Стройматериалы",
     weight: "15.8",
     status: "Планируется",
-    driver: "Сидоров П.К.",
     date: "16.12.2024",
   },
 ];
