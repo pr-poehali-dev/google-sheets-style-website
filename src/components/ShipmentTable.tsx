@@ -94,87 +94,87 @@ const ShipmentTable = ({
                       index % 2 === 0 ? "bg-white" : "bg-blue-25"
                     }`}
                   >
-                    <td className="py-2 px-3 font-medium text-blue-600 w-20 text-xs">
+                    <td className="py-2 px-3 font-medium text-blue-600 w-20 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.id}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "id", value)
                         }
-                        className="font-medium text-blue-600 text-xs"
+                        className="font-medium text-blue-600 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs">
+                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.origin}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "origin", value)
                         }
-                        className="text-gray-900 text-xs"
+                        className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs">
+                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.destination}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "destination", value)
                         }
-                        className="text-gray-900 text-xs"
+                        className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-700 w-36 text-xs">
+                    <td className="py-2 px-3 text-gray-700 w-36 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.organization}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "organization", value)
                         }
-                        className="text-gray-700 text-xs"
+                        className="text-gray-700 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs">
+                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.driver}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "driver", value)
                         }
-                        className="text-gray-900 text-xs"
+                        className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-18 text-xs">
+                    <td className="py-2 px-3 text-gray-900 w-18 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.quantity}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "quantity", value)
                         }
                         type="number"
-                        className="text-gray-900 text-xs"
+                        className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs">
+                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.operator}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "operator", value)
                         }
-                        className="text-gray-900 text-xs"
+                        className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-20 text-xs">
+                    <td className="py-2 px-3 text-gray-900 w-20 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.cost}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "cost", value)
                         }
                         type="number"
-                        className="text-gray-900 text-xs"
+                        className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs">
+                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
                       <EditableCell
                         value={shipment.paymentType}
                         onSave={(value) =>
                           onUpdateField(shipment.id, "paymentType", value)
                         }
-                        className="text-gray-900 text-xs"
+                        className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
                     <td className="py-2 px-3 w-12">
