@@ -229,7 +229,7 @@ const ShipmentTable = ({
                   style={{ width: `${columnSizes.driver}px` }}
                 >
                   <EditableCell
-                    value={shipment.driver}
+                    value={`${shipment.driver.surname} ${shipment.driver.firstName} ${shipment.driver.middleName}`}
                     onSave={(value) =>
                       onUpdateField(shipment.id, "driver", value)
                     }
