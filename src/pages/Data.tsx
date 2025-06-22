@@ -72,9 +72,9 @@ const Data = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">
+        <h1 className="text-xl font-bold text-gray-900">
           Данные по перевозкам
         </h1>
         <AddShipmentDialog
@@ -91,10 +91,10 @@ const Data = () => {
         onSubmit={handleEditShipment}
       />
 
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Перевозки по неделям</CardTitle>
+      <div className="bg-white rounded-lg border border-gray-200">
+        <div className="px-4 py-3 border-b border-gray-100">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="text-lg font-semibold">Перевозки по неделям</h2>
             <WeekNavigation
               selectedWeek={selectedWeek}
               onWeekChange={setSelectedWeek}
@@ -102,8 +102,6 @@ const Data = () => {
               totalWeeks={groupedByWeeks.length}
             />
           </div>
-        </CardHeader>
-        <CardContent>
           <ShipmentFilters
             searchTerm={searchTerm}
             onSearchChange={setSearchTerm}
@@ -111,13 +109,13 @@ const Data = () => {
             onStatusFilterChange={setStatusFilter}
             filteredCount={filteredShipments.length}
           />
-          <ShipmentTable
-            shipments={filteredShipments}
-            onUpdateField={updateShipmentField}
-            onEditShipment={openEditDialog}
-          />
-        </CardContent>
-      </Card>
+        </div>
+        <ShipmentTable
+          shipments={filteredShipments}
+          onUpdateField={updateShipmentField}
+          onEditShipment={openEditDialog}
+        />
+      </div>
     </div>
   );
 };

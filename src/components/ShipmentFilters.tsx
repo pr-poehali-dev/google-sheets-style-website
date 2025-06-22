@@ -23,23 +23,21 @@ const ShipmentFilters = ({
   filteredCount,
 }: ShipmentFiltersProps) => {
   return (
-    <div className="flex items-center justify-between mb-4">
-      <div className="text-sm text-gray-600">
-        Показано заявок: {filteredCount}
-      </div>
+    <div className="flex items-center justify-between">
+      <div className="text-xs text-gray-500">Показано: {filteredCount}</div>
       <div className="flex items-center space-x-2">
         <Input
           placeholder="Поиск..."
-          className="w-80"
+          className="w-64 h-8"
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
         />
         <Select value={statusFilter} onValueChange={onStatusFilterChange}>
-          <SelectTrigger className="w-40">
+          <SelectTrigger className="w-32 h-8">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="all">Все статусы</SelectItem>
+            <SelectItem value="all">Все</SelectItem>
             <SelectItem value="В пути">В пути</SelectItem>
             <SelectItem value="Доставлено">Доставлено</SelectItem>
             <SelectItem value="Планируется">Планируется</SelectItem>
