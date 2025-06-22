@@ -1,7 +1,9 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 import EditableCell from "@/components/EditableCell";
+import ResizableHeader from "@/components/ResizableHeader";
 import { Shipment } from "@/hooks/useShipments";
+import { useColumnResize } from "@/hooks/useColumnResize";
 import { useMemo } from "react";
 
 interface ShipmentTableProps {
@@ -15,6 +17,14 @@ const ShipmentTable = ({
   onUpdateField,
   onEditShipment,
 }: ShipmentTableProps) => {
+  const {
+    columnSizes,
+    isResizing,
+    resizingColumn,
+    startResize,
+    resetColumnSizes,
+  } = useColumnResize();
+
   const groupedByDays = useMemo(() => {
     const groups: { [key: string]: Shipment[] } = {};
 
@@ -53,37 +63,108 @@ const ShipmentTable = ({
             </h3>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full table-fixed">
+            <div className="flex justify-end p-2 border-b border-gray-100">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={resetColumnSizes}
+                className="text-xs text-gray-500 hover:text-gray-700"
+              >
+                <Icon name="RotateCcw" className="h-3 w-3 mr-1" />
+                Сбросить размеры
+              </Button>
+            </div>
+            <table className="w-full" style={{ tableLayout: "fixed" }}>
               <thead>
                 <tr className="bg-gray-50 border-b border-gray-200">
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-20 text-xs">
+                  <ResizableHeader
+                    columnKey="id"
+                    width={columnSizes.id}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Номер
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-28 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="origin"
+                    width={columnSizes.origin}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Откуда
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-28 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="destination"
+                    width={columnSizes.destination}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Куда
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-36 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="organization"
+                    width={columnSizes.organization}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Организация
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-40 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="driver"
+                    width={columnSizes.driver}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Водитель
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-18 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="quantity"
+                    width={columnSizes.quantity}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Кол-во
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-28 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="operator"
+                    width={columnSizes.operator}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Оператор
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-20 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="cost"
+                    width={columnSizes.cost}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Стоимость
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-28 text-xs">
+                  </ResizableHeader>
+                  <ResizableHeader
+                    columnKey="paymentType"
+                    width={columnSizes.paymentType}
+                    onStartResize={startResize}
+                    isResizing={isResizing}
+                    resizingColumn={resizingColumn}
+                  >
                     Вид оплаты
-                  </th>
-                  <th className="text-left py-2 px-3 font-semibold text-gray-700 w-12 text-xs"></th>
+                  </ResizableHeader>
+                  <th
+                    className="text-left py-2 px-3 font-semibold text-gray-700 text-xs"
+                    style={{
+                      width: `${columnSizes.actions}px`,
+                      minWidth: "48px",
+                    }}
+                  ></th>
                 </tr>
               </thead>
               <tbody>
@@ -94,7 +175,10 @@ const ShipmentTable = ({
                       index % 2 === 0 ? "bg-white" : "bg-blue-25"
                     }`}
                   >
-                    <td className="py-2 px-3 font-medium text-blue-600 w-20 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 font-medium text-blue-600 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.id}px` }}
+                    >
                       <EditableCell
                         value={shipment.id}
                         onSave={(value) =>
@@ -103,7 +187,10 @@ const ShipmentTable = ({
                         className="font-medium text-blue-600 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 text-gray-900 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.origin}px` }}
+                    >
                       <EditableCell
                         value={shipment.origin}
                         onSave={(value) =>
@@ -112,7 +199,10 @@ const ShipmentTable = ({
                         className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 text-gray-900 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.destination}px` }}
+                    >
                       <EditableCell
                         value={shipment.destination}
                         onSave={(value) =>
@@ -121,7 +211,10 @@ const ShipmentTable = ({
                         className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-700 w-36 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 text-gray-700 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.organization}px` }}
+                    >
                       <EditableCell
                         value={shipment.organization}
                         onSave={(value) =>
@@ -130,7 +223,10 @@ const ShipmentTable = ({
                         className="text-gray-700 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-40 text-xs">
+                    <td
+                      className="py-2 px-3 text-gray-900 text-xs"
+                      style={{ width: `${columnSizes.driver}px` }}
+                    >
                       <EditableCell
                         value={shipment.driver}
                         onSave={(value) =>
@@ -139,7 +235,10 @@ const ShipmentTable = ({
                         className="text-gray-900 text-xs break-words"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-18 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 text-gray-900 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.quantity}px` }}
+                    >
                       <EditableCell
                         value={shipment.quantity}
                         onSave={(value) =>
@@ -149,7 +248,10 @@ const ShipmentTable = ({
                         className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 text-gray-900 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.operator}px` }}
+                    >
                       <EditableCell
                         value={shipment.operator}
                         onSave={(value) =>
@@ -158,7 +260,10 @@ const ShipmentTable = ({
                         className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-20 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 text-gray-900 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.cost}px` }}
+                    >
                       <EditableCell
                         value={shipment.cost}
                         onSave={(value) =>
@@ -168,7 +273,10 @@ const ShipmentTable = ({
                         className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 text-gray-900 w-28 text-xs whitespace-nowrap truncate">
+                    <td
+                      className="py-2 px-3 text-gray-900 text-xs whitespace-nowrap truncate"
+                      style={{ width: `${columnSizes.paymentType}px` }}
+                    >
                       <EditableCell
                         value={shipment.paymentType}
                         onSave={(value) =>
@@ -177,7 +285,10 @@ const ShipmentTable = ({
                         className="text-gray-900 text-xs whitespace-nowrap truncate"
                       />
                     </td>
-                    <td className="py-2 px-3 w-12">
+                    <td
+                      className="py-2 px-3"
+                      style={{ width: `${columnSizes.actions}px` }}
+                    >
                       <Button
                         variant="ghost"
                         size="sm"
